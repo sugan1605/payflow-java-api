@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: payflow-postgres
+    environment:
+      POSTGRES_DB: payflow
+      POSTGRES_USER: payflow
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in your environment}
+    ports:
+      - "5432:5432"
+    volumes:
+      - payflow-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U payflow -d payflow" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  payflow-postgres-data:
