@@ -17,6 +17,26 @@ jobs:
     name: Build and test
     runs-on: ubuntu-latest
 
+    env:
+      DB_URL: jdbc:postgresql://localhost:5432/payflow
+      DB_USERNAME: payflow
+      DB_PASSWORD: payflow-ci-password
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: payflow
+          POSTGRES_USER: payflow
+          POSTGRES_PASSWORD: payflow-ci-password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U payflow -d payflow"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
