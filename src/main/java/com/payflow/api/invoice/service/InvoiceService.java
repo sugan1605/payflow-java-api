@@ -2,25 +2,32 @@ package com.payflow.api.invoice.service;
 
 import com.payflow.api.invoice.Invoice;
 import com.payflow.api.invoice.persistence.InvoiceEntity;
+import com.payflow.api.invoice.persistence.InvoiceMapper;
 import com.payflow.api.invoice.persistence.InvoiceRepository;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.UUID;
-import org.springframework.stereotype.Service;
 
 
 @Service
 public class InvoiceService {
     private final InvoiceRepository invoiceRepository;
+    private final InvoiceMapper invoiceMapper;
 
     public InvoiceService(InvoiceRepository invoiceRepository) {
         this.invoiceRepository = invoiceRepository;
+        this.invoiceMapper = new InvoiceMapper();
     }
 
-    public List<InvoiceEntity> findAll() {
-        return invoiceRepository.findAll();
+    public List<Invoice> findAll() {
+        return invoiceRepository.findAll()
+                .stream().map(invoiceMapper::toDomain).toList();
     }
 
-    public InvoiceEntity findById(UUID id) {
-        return invoiceRepository.findById(id).orElseThrow(() -> new InvoiceNotFoundException(id));
+    public Invoice findById(UUID id) {
+        InvoiceEntity entity = invoiceRepository.findById(id)
+                .orElseThrow(() -> new InvoiceNotFoundException(id));
+        return invoiceMapper.toDomain(entity);
     }
 }
