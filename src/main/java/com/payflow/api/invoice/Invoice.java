@@ -38,6 +38,34 @@ public class Invoice {
 
     }
 
+    // Restoration constructor
+
+    public Invoice(UUID id, String customerName, BigDecimal amount, Currency currency, InvoiceStatus status) {
+
+        if (id == null) {
+            throw new IllegalArgumentException("Invoice id cannot be null");
+        }
+        if (customerName == null || customerName.isBlank()) {
+            throw new IllegalArgumentException("Customer name cannot be blank");
+        }
+        if (amount == null || amount.signum() <= 0) {
+            throw new IllegalArgumentException("Amount must be greater than zero");
+        }
+        if (currency == null) {
+            throw new IllegalArgumentException("Currency cannot be null");
+        }
+        if (status == null) {
+            throw new IllegalArgumentException("Invoice status cannot be null");
+        }
+
+        this.id = id;
+        this.customerName = customerName;
+        this.amount = amount;
+        this.currency = currency;
+        this.status = status;
+
+    }
+
     public UUID getId() {
         return id;
     }
