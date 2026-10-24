@@ -2,6 +2,9 @@ package com.payflow.api.invoice.persistence;
 
 import com.payflow.api.invoice.Invoice;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class InvoiceMapper {
 
     public InvoiceEntity toEntity(Invoice invoice) {

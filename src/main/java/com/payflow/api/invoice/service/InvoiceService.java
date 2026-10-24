@@ -15,9 +15,9 @@ public class InvoiceService {
     private final InvoiceRepository invoiceRepository;
     private final InvoiceMapper invoiceMapper;
 
-    public InvoiceService(InvoiceRepository invoiceRepository) {
+    public InvoiceService(InvoiceRepository invoiceRepository, InvoiceMapper invoiceMapper) {
         this.invoiceRepository = invoiceRepository;
-        this.invoiceMapper = new InvoiceMapper();
+        this.invoiceMapper = invoiceMapper;
     }
 
     public List<Invoice> findAll() {
@@ -29,5 +29,13 @@ public class InvoiceService {
         InvoiceEntity entity = invoiceRepository.findById(id)
                 .orElseThrow(() -> new InvoiceNotFoundException(id));
         return invoiceMapper.toDomain(entity);
+    }
+
+    public Invoice save(Invoice invoice) {
+        InvoiceEntity entity = invoiceMapper.toEntity(invoice);
+
+        InvoiceEntity savedEntity = invoiceRepository.save(entity);
+
+        return invoiceMapper.toDomain(savedEntity);
     }
 }
